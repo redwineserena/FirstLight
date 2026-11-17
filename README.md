@@ -31,7 +31,10 @@
 | NeoForge 1.20.1 | `introvideo-neoforge-1.0.0.jar`（NeoForge 1.20.1 与 Forge 47.x 同运行时，Forge 版也可直接用） |
 | Fabric 1.20.1 | `introvideo-fabric-1.0.0.jar` |
 
-首次启动会把内置示例视频释放到 `config/intro_video/intro.mp4`，之后可以**直接替换这个文件**换成自己的视频（不用重新打包）。
+首次启动会把内置的演示视频释放到 `config/intro_video/intro.mp4`（来源见下方「素材来源与版权说明」），
+之后**直接替换这个文件**即可换成你自己的视频（不用重新打包）。
+
+> 注意：内置视频/音频来自他人作品（见「素材来源与版权说明」），仅供演示；正式发布/商用请替换成你自己拥有版权或已获授权的视频。
 
 ## 配置
 
@@ -85,6 +88,26 @@
 | `showLoopDebug` | `false` | 左上角显示循环调试数字 |
 | `fpsOverride` | `0.0` | 强制帧率（0 = 自动） |
 
+## 换成自己的视频
+
+1. 把视频放到 `config/intro_video/intro.mp4`（或任意位置，用配置 `video` 指向它）
+2. 视频格式要求见下节；如果你的视频开头/结尾有不需要的部分，用 `startAtSeconds` / `endAtSeconds` / `loopStartAtSeconds` 调整
+3. 音频可以直接用视频自带音轨吗？——不行，模组音频来自模组内置的 OGG/WAV。要换成自己的音乐，替换
+   `common/src/main/resources/assets/introvideo/sounds/intro.ogg`（和 `intro.wav`）后重新构建；
+   或者把 `audio` 设为 `false` 只放视频
+
+
+## 素材来源与版权说明
+
+内置的开场视频与音频**不是本项目原创**，来源于 B 站视频：
+
+- 《如果MC有入场动画..》 https://www.bilibili.com/video/BV1qvJR6iEsz/
+- 该视频本身可能也是转载，**版权归原作者所有**
+
+这里内置仅用于**演示这个模组的效果**。如果你要把它用于公开整合包/商业用途，请先获得原作者授权；
+如果原作者不希望被转载，请开 Issue 或联系仓库作者删除。
+</br>你也可以直接替换 `config/intro_video/intro.mp4` 为自己的视频，或把 `audio` 设为 `false`。
+
 ## 视频格式建议
 
 - 容器 **MP4**，视频 **H.264 (avc1)**，8bit 4:2:0（`yuv420p`）
@@ -127,7 +150,7 @@ dist/       构建产物（不入库）
 
 - 只支持 **Minecraft 1.20.1**（其他版本需要改 mixin 映射）
 - 只支持 **H.264** 视频；H.265 / AV1 等无法解码
-- 内置视频/音频是作者自制内容，替换请自备视频
+- 仓库内置的视频/音频是自制的**占位素材**（8 秒渐变 + 轻音），只用于让模组开箱能跑；正式使用请替换成你自己的视频
 - NeoForge 1.20.1 与 Forge 47.x 共用 SRG 运行时，所以 NeoForge 版构建工具链与 Forge 相同
 
 ## 鸣谢
