@@ -1,4 +1,6 @@
-# Intro Video（开场视频加载动画）— Minecraft 1.20.1
+# FirstLight · 开场视频加载动画 — Minecraft 1.20.1
+
+> 下载：[Releases](https://github.com/redwineserena/FirstLight/releases) · 问题反馈：[Issues](https://github.com/redwineserena/FirstLight/issues)
 
 启动游戏时接管加载画面：**加载阶段**显示底图 +「正在加载中」（把原版 / Forge 的加载动画、红底白字工作室画面全部盖住），
 **加载完成后**进入开场界面播放视频，并循环，底部提示「按任意键继续」；按键淡出进入主菜单。
@@ -21,7 +23,7 @@
 
 ## 下载 & 安装
 
-从 [Releases](../../releases) 下载对应加载器的 jar（或自行构建，见下文），放进整合包/实例的 `mods/` 目录：
+从 [Releases](https://github.com/redwineserena/FirstLight/releases) 下载对应加载器的 jar（或自行构建，见下文），放进整合包/实例的 `mods/` 目录：
 
 | 加载器 | 文件 |
 | --- | --- |
