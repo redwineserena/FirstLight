@@ -209,6 +209,9 @@ public final class IntroConfig {
     /** 欢迎提示停留时长（秒，含滑入滑出）。 */
     public double welcomeToastSeconds = 5.0;
 
+    /** 欢迎提示的音效 id（默认原版音符盒“叮”）。可换成 ui.toast.challenge_complete 等。 */
+    public String welcomeToastSound = "minecraft:block.note_block.bell";
+
     /** 加载/开场期间把游戏窗口标题改成“正在加载 . .. ...”动画（系统字体，不依赖游戏字体）。 */
     public boolean changeWindowTitle = true;
 

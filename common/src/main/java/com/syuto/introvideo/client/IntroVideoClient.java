@@ -225,9 +225,7 @@ public final class IntroVideoClient {
                     new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.GRASS_BLOCK),
                     seconds * 1000L);
             minecraft.getToasts().addToast(toast);
-            // 原版成就/挑战完成音效（就是那一声“叮”）
-            minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
-                    net.minecraft.sounds.SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, 1.0F, 1.0F));
+            playWelcomeSound(minecraft);
             IntroVideo.LOGGER.info("[IntroVideo] 弹出原版成就提示: {} / {}",
                     config.welcomeToastTitle, config.welcomeToastText);
         } catch (Throwable t) {
@@ -256,6 +254,25 @@ public final class IntroVideoClient {
             } else if (Util.getMillis() - transitionStartMs > 15000L) {
                 transitionStartMs = -1L;
             }
+        }
+    }
+
+    /** 播放欢迎提示音效（默认原版音符盒“叮”，可在配置里换成任意音效 id）。 */
+    private void playWelcomeSound(Minecraft minecraft) {
+        String id = config.welcomeToastSound == null || config.welcomeToastSound.isBlank()
+                ? "minecraft:block.note_block.bell" : config.welcomeToastSound.trim();
+        try {
+            net.minecraft.resources.ResourceLocation location = net.minecraft.resources.ResourceLocation.tryParse(id);
+            net.minecraft.sounds.SoundEvent event = location == null ? null
+                    : net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.get(location);
+            if (event == null) {
+                IntroVideo.LOGGER.warn("[IntroVideo] 找不到音效 {}，使用默认叮声", id);
+                event = net.minecraft.sounds.SoundEvents.NOTE_BLOCK_BELL.value();
+            }
+            minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(event, 1.0F, 1.0F));
+            IntroVideo.LOGGER.info("[IntroVideo] 播放欢迎提示音效: {}", id);
+        } catch (Throwable t) {
+            IntroVideo.LOGGER.warn("[IntroVideo] 播放欢迎提示音效失败", t);
         }
     }
 
