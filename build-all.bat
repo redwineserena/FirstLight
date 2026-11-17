@@ -33,9 +33,9 @@ if errorlevel 1 (
 popd
 
 if not exist dist mkdir dist
-copy /Y "forge\build\libs\introvideo-forge-1.0.0.jar" "dist\" >nul
-copy /Y "neoforge\build\libs\introvideo-neoforge-1.0.0.jar" "dist\" >nul
-copy /Y "fabric\build\libs\introvideo-fabric-1.0.0.jar" "dist\" >nul
+copy /Y "forge\build\libs\firstlight-forge-1.0.0.jar" "dist\" >nul
+copy /Y "neoforge\build\libs\firstlight-neoforge-1.0.0.jar" "dist\" >nul
+copy /Y "fabric\build\libs\firstlight-fabric-1.0.0.jar" "dist\" >nul
 
 echo.
 echo done. jars are in dist\

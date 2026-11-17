@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * {@link #boot(String)} 打一行日志。</p>
  */
 public final class IntroVideo {
-    public static final String MOD_ID = "introvideo";
+    public static final String MOD_ID = "firstlight";
     public static final Logger LOGGER = LoggerFactory.getLogger("IntroVideo");
 
     private static boolean booted;

@@ -464,14 +464,14 @@ public final class IntroVideoClient {
         if (config != null && config.loadingText != null && !config.loadingText.isEmpty()) {
             return Component.literal(config.loadingText);
         }
-        return translatedOr("introvideo.loading", "正在加载", "Loading");
+        return translatedOr("firstlight.loading", "正在加载", "Loading");
     }
 
     public Component promptComponent() {
         if (config != null && config.promptText != null && !config.promptText.isEmpty()) {
             return Component.literal(config.promptText);
         }
-        return translatedOr("introvideo.prompt", "按任意键继续", "Press any key to continue");
+        return translatedOr("firstlight.prompt", "按任意键继续", "Press any key to continue");
     }
 
     /**

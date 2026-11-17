@@ -1,10 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "introvideo",
+  "id": "firstlight",
   "version": "${version}",
-  "name": "Intro Video",
+  "name": "FirstLight",
   "description": "Replaces the loading screen with a full-screen video intro and waits for any key press before the title screen.",
-  "authors": ["redwine"],
+  "authors": [
+    "redwine"
+  ],
   "license": "MIT",
   "environment": "client",
   "entrypoints": {
@@ -14,7 +16,7 @@
   },
   "mixins": [
     {
-      "config": "introvideo.mixins.json",
+      "config": "firstlight.mixins.json",
       "environment": "client"
     }
   ],

@@ -27,9 +27,9 @@
 
 | 加载器 | 文件 |
 | --- | --- |
-| Forge 1.20.1 | `introvideo-forge-1.0.0.jar` |
-| NeoForge 1.20.1 | `introvideo-neoforge-1.0.0.jar`（NeoForge 1.20.1 与 Forge 47.x 同运行时，Forge 版也可直接用） |
-| Fabric 1.20.1 | `introvideo-fabric-1.0.0.jar` |
+| Forge 1.20.1 | `firstlight-forge-1.0.0.jar` |
+| NeoForge 1.20.1 | `firstlight-neoforge-1.0.0.jar`（NeoForge 1.20.1 与 Forge 47.x 同运行时，Forge 版也可直接用） |
+| Fabric 1.20.1 | `firstlight-fabric-1.0.0.jar` |
 
 首次启动会把内置的演示视频释放到 `config/intro_video/intro.mp4`（来源见下方「素材来源与版权说明」），
 之后**直接替换这个文件**即可换成你自己的视频（不用重新打包）。
@@ -38,7 +38,7 @@
 
 ## 配置
 
-配置文件：`config/intro_video.json`（首次启动自动生成）。
+配置文件：`config/firstlight.json`（首次启动自动生成）。
 
 | 配置项 | 默认值 | 说明 |
 | --- | --- | --- |
@@ -130,9 +130,9 @@ build-all.bat
 产物在 `dist/`：
 
 ```
-dist/introvideo-forge-1.0.0.jar
-dist/introvideo-neoforge-1.0.0.jar
-dist/introvideo-fabric-1.0.0.jar
+dist/firstlight-forge-1.0.0.jar
+dist/firstlight-neoforge-1.0.0.jar
+dist/firstlight-fabric-1.0.0.jar
 ```
 
 - Forge 模块：ForgeGradle 6 + Forge 47.4.23

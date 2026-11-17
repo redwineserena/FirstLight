@@ -18,7 +18,9 @@ import java.nio.file.Files;
  */
 public final class IntroConfig {
 
-    public static final String FILE_NAME = "intro_video.json";
+    public static final String FILE_NAME = "firstlight.json";
+    /** 旧版本配置文件（用于自动迁移到新的 firstlight.json）。 */
+    public static final String LEGACY_FILE_NAME = "intro_video.json";
 
     /**
      * 配置版本（内部用）：老版本配置没有这个字段。
@@ -274,12 +276,20 @@ public final class IntroConfig {
     public static IntroConfig load(File gameDir) {
         File configDir = new File(gameDir, "config");
         File configFile = new File(configDir, FILE_NAME);
+        // 旧版本（mod id 为 introvideo 时）的配置文件名是 intro_video.json，这里自动迁移
+        File readFile = configFile;
+        if (!configFile.isFile()) {
+            File legacy = new File(configDir, LEGACY_FILE_NAME);
+            if (legacy.isFile()) {
+                readFile = legacy;
+            }
+        }
         IntroConfig config = null;
-        if (configFile.isFile()) {
-            try (BufferedReader reader = Files.newBufferedReader(configFile.toPath(), StandardCharsets.UTF_8)) {
+        if (readFile.isFile()) {
+            try (BufferedReader reader = Files.newBufferedReader(readFile.toPath(), StandardCharsets.UTF_8)) {
                 config = GSON.fromJson(reader, IntroConfig.class);
             } catch (Exception e) {
-                IntroVideo.LOGGER.warn("[IntroVideo] 读取 {} 失败，使用默认配置", configFile, e);
+                IntroVideo.LOGGER.warn("[IntroVideo] 读取 {} 失败，使用默认配置", readFile, e);
             }
         }
         if (config == null) {
@@ -291,6 +301,9 @@ public final class IntroConfig {
         config.normalize();
         if (!configFile.isFile() || before != GSON.toJson(config).length()) {
             config.save();
+            if (!readFile.equals(configFile)) {
+                IntroVideo.LOGGER.info("[IntroVideo] 已把旧配置 {} 迁移为 {}", readFile.getName(), configFile.getName());
+            }
         }
         return config;
     }
