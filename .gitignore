@@ -1,0 +1,22 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.ipr
+*.iws
+eclipse/
+
+# 运行目录 / 产物
+run/
+dist/
+*.log
+logs/
+
+# 说明：内置视频 common/src/main/resources/assets/introvideo/intro.mp4 是交付内容的一部分，
+# 不再忽略；如果以后换更大的视频又不想进 git，可以自行把它加回忽略列表。

@@ -1,0 +1,158 @@
+// ---------------------------------------------------------------------------
+// NeoForge 1.20.1 模块
+//
+// 为什么和 forge/ 几乎一样？
+//   NeoForge 1.20.1（47.1.x）是从 Forge 47.x fork 出来的，**没有改包名**（仍是
+//   net.minecraftforge.*），它自己在 mods.toml 里注册的 mod id 也是 "forge"。
+//   因此 Forge 1.20.1 的 userdev 工具链构建出的 jar 就是 NeoForge 1.20.1 能直接加载的
+//   jar（本模块 = 面向 NeoForge 1.20.1 的兼容构建，产物名带 -neoforge 方便区分）。
+//   真正把包名改成 net.neoforged.* 是 1.20.2+ 的事情；以后要做 1.21 的 NeoForge 版本，
+//   应该改用 ModDevGradle（net.neoforged.moddev）而不是这个文件。
+// 详见 ../docs/NEOFORGE-1.20.1.md
+// ---------------------------------------------------------------------------
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'org.spongepowered.mixin' version '0.7.+'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = "${mod_id}-neoforge"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+minecraft {
+    mappings channel: mapping_channel, version: mapping_version
+    copyIdeResources = true
+
+    runs {
+        configureEach {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', ''
+            property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        client {
+            property 'forge.enabledGameTestNamespaces', mod_id
+        }
+    }
+}
+
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir '../common/src/main/java'
+        }
+        resources {
+            srcDir '../common/src/main/resources'
+        }
+    }
+}
+
+repositories {
+    maven { name = 'MinecraftForge'; url = 'https://maven.minecraftforge.net/' }
+    maven { name = 'Sponge'; url = 'https://repo.spongepowered.org/repository/maven-public/' }
+    mavenCentral()
+}
+
+configurations {
+    // libraries that get packed into the mod jar (no shading/relocation needed: org.jcodec is unique)
+    embed
+    implementation.extendsFrom(embed)
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    // 纯 Java 的 MP4/H.264 解码库（无 native、约 2MB，BSD-2 协议）
+    embed 'org.jcodec:jcodec:0.2.5'
+}
+
+// ---------------------------------------------------------------------------
+// 把内嵌库（JCodec）的 class 解包进本模组自己的 classes 输出目录。
+//
+// 为什么不用普通的 `implementation` 依赖：
+//   Forge 1.20.1 的客户端运行在 Bootstraplauncher 自建的模块层里，普通依赖不会
+//   进入模组模块，开发环境 runClient 会抛 NoClassDefFoundError；而直接嵌进 jar
+//   又只在生产环境生效。解包到 classes 输出目录后，开发环境和打包后的 jar 都能
+//   直接看到这些类，三端行为一致。
+// ---------------------------------------------------------------------------
+def mainClassesDir = layout.buildDirectory.dir('classes/java/main')
+
+tasks.register('embedLibraries', Copy) {
+    dependsOn tasks.named('compileJava')
+    from { configurations.embed.collect { it.isDirectory() ? it : zipTree(it) } }
+    into mainClassesDir
+    exclude 'META-INF/**', 'module-info.class', '**/*.SF', '**/*.DSA', '**/*.RSA'
+    includeEmptyDirs = false
+}
+
+tasks.named('classes').configure {
+    dependsOn tasks.named('embedLibraries')
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    filteringCharset = 'UTF-8'
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            forge_version          : forge_version,
+            forge_version_range    : forge_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    exclude 'META-INF/MANIFEST.MF', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'module-info.class'
+    manifest {
+        attributes([
+                'Specification-Title'     : mod_id,
+                'Specification-Vendor'    : mod_authors,
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.jar.archiveVersion,
+                'Implementation-Vendor'   : mod_authors,
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+    finalizedBy 'reobfJar'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}

@@ -1,0 +1,94 @@
+plugins {
+    id 'fabric-loom' version "${loom_version}"
+    id 'maven-publish'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = "${mod_id}-fabric"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    // 打进模组 jar 的纯 Java 依赖（JCodec）
+    embed
+    implementation.extendsFrom(embed)
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    // 用 Mojang 官方映射，这样 common 源码和 Forge/NeoForge 完全一致
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+
+    embed 'org.jcodec:jcodec:0.2.5'
+}
+
+loom {
+    mixin {
+        defaultRefmapName = "${mod_id}.refmap.json"
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir '../common/src/main/java'
+        }
+        resources {
+            srcDir '../common/src/main/resources'
+        }
+    }
+}
+
+processResources {
+    filteringCharset = 'UTF-8'
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+// 把内嵌库（JCodec）解包进本模组自己的 classes 输出目录：
+// 开发环境可以直接加载，打包后的 jar 也会自动带上（Loom 的 remapJar 会一起处理）。
+def mainClassesDir = layout.buildDirectory.dir('classes/java/main')
+
+tasks.register('embedLibraries', Copy) {
+    dependsOn tasks.named('compileJava')
+    from { configurations.embed.collect { it.isDirectory() ? it : zipTree(it) } }
+    into mainClassesDir
+    exclude 'META-INF/**', 'module-info.class', '**/*.SF', '**/*.DSA', '**/*.RSA'
+    includeEmptyDirs = false
+}
+
+tasks.named('classes').configure {
+    dependsOn tasks.named('embedLibraries')
+}
+
+tasks.named('jar', Jar).configure {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    exclude 'META-INF/MANIFEST.MF', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'module-info.class'
+}

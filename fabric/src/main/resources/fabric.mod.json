@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "introvideo",
+  "version": "${version}",
+  "name": "Intro Video",
+  "description": "Replaces the loading screen with a full-screen video intro and waits for any key press before the title screen.",
+  "authors": ["redwine"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.syuto.introvideo.fabric.IntroVideoFabric"
+    ]
+  },
+  "mixins": [
+    {
+      "config": "introvideo.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~1.20.1",
+    "java": ">=17"
+  }
+}

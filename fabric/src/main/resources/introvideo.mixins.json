@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.syuto.introvideo.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "introvideo.refmap.json",
+  "mixins": [],
+  "client": [
+    "GameRendererMixin",
+    "MinecraftSetScreenMixin",
+    "MinecraftOverlayMixin",
+    "MusicManagerMixin",
+    "FontManagerMixin"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
