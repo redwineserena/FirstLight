@@ -108,6 +108,10 @@
 如果原作者不希望被转载，请开 Issue 或联系仓库作者删除。
 </br>你也可以直接替换 `config/intro_video/intro.mp4` 为自己的视频，或把 `audio` 设为 `false`。
 
+
+> 补充：模组的默认参数（`loopStartAtSeconds=5` 跳过片头、结尾黑场循环点等）是**针对这段演示视频调好**的。
+> 换成你自己的视频后，建议按实际内容调整 `startAtSeconds` / `loopStartAtSeconds` / `endAtSeconds`。
+
 ## 视频格式建议
 
 - 容器 **MP4**，视频 **H.264 (avc1)**，8bit 4:2:0（`yuv420p`）
