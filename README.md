@@ -93,7 +93,7 @@
 1. 把视频放到 `config/intro_video/intro.mp4`（或任意位置，用配置 `video` 指向它）
 2. 视频格式要求见下节；如果你的视频开头/结尾有不需要的部分，用 `startAtSeconds` / `endAtSeconds` / `loopStartAtSeconds` 调整
 3. 音频可以直接用视频自带音轨吗？——不行，模组音频来自模组内置的 OGG/WAV。要换成自己的音乐，替换
-   `common/src/main/resources/assets/introvideo/sounds/intro.ogg`（和 `intro.wav`）后重新构建；
+   `common/src/main/resources/assets/firstlight/sounds/intro.ogg`（和 `intro.wav`）后重新构建；
    或者把 `audio` 设为 `false` 只放视频
 
 
