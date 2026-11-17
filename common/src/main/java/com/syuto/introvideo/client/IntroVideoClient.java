@@ -161,7 +161,7 @@ public final class IntroVideoClient {
         if (posterPixels != null) {
             return;
         }
-        try (InputStream in = IntroVideoClient.class.getResourceAsStream("/assets/introvideo/poster.png")) {
+        try (InputStream in = IntroVideoClient.class.getResourceAsStream("/assets/" + com.syuto.introvideo.IntroVideo.MOD_ID + "/poster.png")) {
             if (in == null) {
                 return;
             }
@@ -320,7 +320,7 @@ public final class IntroVideoClient {
         if (loadingTextPixels != null) {
             return;
         }
-        try (InputStream in = IntroVideoClient.class.getResourceAsStream("/assets/introvideo/loading_text.png")) {
+        try (InputStream in = IntroVideoClient.class.getResourceAsStream("/assets/" + com.syuto.introvideo.IntroVideo.MOD_ID + "/loading_text.png")) {
             if (in == null) {
                 return;
             }

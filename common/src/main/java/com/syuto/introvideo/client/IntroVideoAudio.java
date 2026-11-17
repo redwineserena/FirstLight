@@ -31,7 +31,7 @@ import net.minecraft.util.RandomSource;
 public final class IntroVideoAudio {
 
     private static final ResourceLocation SOUND_ID = new ResourceLocation(IntroVideo.MOD_ID, "intro");
-    private static final String WAV_RESOURCE = "/assets/introvideo/sounds/intro.wav";
+    private static final String WAV_RESOURCE = "/assets/" + com.syuto.introvideo.IntroVideo.MOD_ID + "/sounds/intro.wav";
 
     private SoundInstance instance;
     private Clip clip;
